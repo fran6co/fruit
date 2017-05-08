@@ -454,7 +454,7 @@ struct InvokeConstructorWithInjectedArgVector<AnnotatedC(AnnotatedArgs...), frui
 	// `injector' *is* used below, but when there are no AnnotatedArgs some compilers report it as unused.
 	(void)injector;
     return allocator.constructObject<AnnotatedC, InjectorStorage::RemoveAnnotations<AnnotatedArgs>...>(
-        injector.get<InjectorStorage::RemoveAnnotations<AnnotatedArgs>>(nodeItrs)
+        injector.get<typename InjectorStorage::RemoveAnnotations<AnnotatedArgs>>(nodeItrs)
         ...);
   }
 
