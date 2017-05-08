@@ -445,6 +445,8 @@ struct InvokeConstructorWithInjectedArgVector;
 template <typename AnnotatedC, typename... AnnotatedArgs, typename... Indexes>
 struct InvokeConstructorWithInjectedArgVector<AnnotatedC(AnnotatedArgs...), fruit::impl::meta::Vector<Indexes...>> {
   using C          = InjectorStorage::RemoveAnnotations<AnnotatedC>;
+  template<typename T>
+  using R          = typename InjectorStorage::template RemoveAnnotations<T>;
 
   // This is not inlined in operator() so that all the lazyGetPtr() calls happen first (instead of being interleaved
   // with the get() calls). The lazyGetPtr() calls don't branch, while the get() calls branch on the result of the
@@ -454,7 +456,7 @@ struct InvokeConstructorWithInjectedArgVector<AnnotatedC(AnnotatedArgs...), frui
 	// `injector' *is* used below, but when there are no AnnotatedArgs some compilers report it as unused.
 	(void)injector;
     return allocator.constructObject<AnnotatedC, InjectorStorage::RemoveAnnotations<AnnotatedArgs>...>(
-        injector.get<typename InjectorStorage::template RemoveAnnotations<AnnotatedArgs>>(nodeItrs)
+        injector.get<R<AnnotatedArgs>>(nodeItrs)
         ...);
   }
 
