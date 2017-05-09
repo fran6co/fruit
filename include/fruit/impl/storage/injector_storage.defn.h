@@ -295,7 +295,7 @@ struct InvokeLambdaWithInjectedArgVector<AnnotatedSignature, Lambda, true /* lam
   using CPtr = InjectorStorage::RemoveAnnotations<AnnotatedT>;
   using AnnotatedC = InjectorStorage::NormalizeType<AnnotatedT>;
   template <typename T>
-  using U = typename InjectorStorage::template RemoveAnnotations<fruit::impl::meta::UnwrapType<T>>;
+  using U = typename InjectorStorage::template RemoveAnnotations<typename fruit::impl::meta::template UnwrapType<T>>;
   
   CPtr operator()(InjectorStorage& injector, FixedSizeAllocator& allocator) {
 	// `injector' *is* used below, but when there are no AnnotatedArgs some compilers report it as unused.
