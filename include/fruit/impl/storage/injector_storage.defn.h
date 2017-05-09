@@ -295,12 +295,16 @@ struct InvokeLambdaWithInjectedArgVector<AnnotatedSignature, Lambda, true /* lam
   using CPtr = InjectorStorage::RemoveAnnotations<AnnotatedT>;
   using AnnotatedC = InjectorStorage::NormalizeType<AnnotatedT>;
   template <typename T>
-  using U = typename InjectorStorage::template RemoveAnnotations<typename fruit::impl::meta::template UnwrapType<T>>;
+  using R = typename InjectorStorage::template RemoveAnnotations<T>;
+  template <typename T>
+  using U = typename fruit::impl::meta::template UnwrapType<T>;
+  template <typename T>
+  using RU = typename R<U<T>>;
   
   CPtr operator()(InjectorStorage& injector, FixedSizeAllocator& allocator) {
 	// `injector' *is* used below, but when there are no AnnotatedArgs some compilers report it as unused.
 	(void)injector;
-	CPtr cPtr = LambdaInvoker::invoke<Lambda, U<AnnotatedArgs>...>(
+	CPtr cPtr = LambdaInvoker::invoke<Lambda, RU<AnnotatedArgs>...>(
         injector.get<fruit::impl::meta::UnwrapType<AnnotatedArgs>>()...);
     allocator.registerExternallyAllocatedObject(cPtr);
     
