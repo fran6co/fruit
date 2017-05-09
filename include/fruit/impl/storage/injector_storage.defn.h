@@ -455,7 +455,7 @@ struct InvokeConstructorWithInjectedArgVector<AnnotatedC(AnnotatedArgs...), frui
   C* constructHelper(InjectorStorage& injector, FixedSizeAllocator& allocator, NodeItrs... nodeItrs) {
 	// `injector' *is* used below, but when there are no AnnotatedArgs some compilers report it as unused.
 	(void)injector;
-    return allocator.constructObject<AnnotatedC, InjectorStorage::RemoveAnnotations<AnnotatedArgs>...>(
+    return allocator.constructObject<AnnotatedC, R<AnnotatedArgs>...>(
         injector.get<R<AnnotatedArgs>>(nodeItrs)
         ...);
   }
